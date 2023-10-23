@@ -1,8 +1,16 @@
 
-function getPlayerChoice() {
-    let choice = prompt("Rock, Paper or Scissors?");
-    return choice;
-}
+const possibleChoice = document.querySelectorAll('.choice');
+const playerScore = document.querySelector('.player');
+const compScore = document.querySelector('.computer');
+const scoreboard = {
+    player : 0,
+    computer : 0
+};
+const result = document.querySelector('.result');
+let roundsPlayed = 0;
+
+possibleChoice.forEach(choice => choice.addEventListener('click', round))
+
 
 function getComputerChoice() {
     let arr = ['rock', 'paper', 'scissor'];
@@ -10,66 +18,68 @@ function getComputerChoice() {
     return arr[index];
 }
 
-function round(getPlayerChoice, getComputerChoice) {
-    let player = getPlayerChoice();
+function round(e) {
+    let player = e.target.id;
     let comp = getComputerChoice();
-
+    roundsPlayed++;
     if(player == 'rock') {
         if(comp == 'scissor') {
-            console.log("You win! Rock beats Scissor");
-            return 'player'
+            result.textContent = "You win! Rock beats Paper"
+            scoreboard.player++;
         } else if(comp == 'paper') {
-            console.log("You lose! Paper beats Rock");
-            return 'comp';
+            result.textContent = "You lose! Paper beats Rock";
+            scoreboard.computer++;
         } else {
-            console.log("Tie!");
-            return null;
+            result.textContent = "Tie!";
         }
     } else if(player == 'paper') {
         if(comp == 'rock') {
-            console.log("You win! Paper beats Rock");
-            return 'player';
+            result.textContent = "You win! Paper beats Rock";
+            scoreboard.player++;
         } else if(comp == 'scissor') {
-            console.log("You lose! Scissor beats Paper");
-            return 'comp';
+            result.textContent = "You lose! Scissor beats Paper";
+            scoreboard.computer++;
         } else {
-            console.log("Tie!");
-            return null;
+            result.textContent = "Tie!";
         }
     } else if(player == 'scissor') {
         if(comp == 'paper') {
-            console.log("You win! Scissor beats Paper");
-            return 'player';
+            result.textContent = "You win! Scissor beats Paper";
+            scoreboard.player++;
         } else if(comp == 'rock') {
-            console.log("You lose! Rock beats Scissor");
-            return 'comp';
+            result.textContent = "You lose! Rock beats Scissor";
+            scoreboard.computer++;
         } else {
-            console.log("Tie!");
-            return null;
+            result.textContent = "Tie!";
         }
     } 
+    updateScore();
 }
 
-function playGame(round, getComputerChoice, getPlayerChoice) {
-    let t = 5;
-    let pw = 0;
-    let cw = 0;
-    while(t--) {
-        let r = round(getPlayerChoice, getComputerChoice);
-        if(r == 'player') {
-            pw++;
-        } else if(r == 'comp') {
-            cw++;
+function updateScore() {
+    let pw = scoreboard.player;
+    let cw = scoreboard.computer;
+    playerScore.textContent = `Player: ${pw}`;
+    compScore.textContent = `Computer: ${cw}`;
+    if(roundsPlayed%5==0) {
+        if(pw>cw) {
+            result.textContent = "PLAYER wins the bout!";
+        } else if(cw>pw) {
+            result.textContent = "COMPUTER wins the bout :(";
+        } else {
+            result.textContent = "Its a Tie!!!";
         }
     }
-
-    if(pw>cw) {
-        console.log("PLAYER wins!");
-    } else if(cw>pw) {
-        console.log("COMPUTER wins!")
-    } else {
-        console.log("TIED!");
-    }
 }
 
+const reset = document.querySelector('.reset');
+reset.addEventListener('click', clear)
+
+function clear() {
+    scoreboard.player = 0;
+    scoreboard.computer = 0;
+    playerScore.textContent = "Player: ";
+    compScore.textContent = "Computer: ";
+    result.textContent = "";
+}
 
